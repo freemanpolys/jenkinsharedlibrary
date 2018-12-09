@@ -39,7 +39,8 @@ def  call(Map<String, Object> config) {
         
         stage('packaging') {
             steps {
-                sh "./mvnw verify -P${config.profile} -DskipTests"
+                profile = getConfig(config, "profile", "dev")
+                sh "./mvnw verify -P$profile -DskipTests"
                 archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
             }
         }
@@ -47,4 +48,9 @@ def  call(Map<String, Object> config) {
     }
     }
 
+}
+
+def getConfig(Map<String, Object> config, String key, defaultValue) {
+    def value = config[key]
+    return (value != null) ? value : defaultValue
 }
