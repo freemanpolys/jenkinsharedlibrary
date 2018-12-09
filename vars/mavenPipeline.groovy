@@ -39,7 +39,9 @@ def  call(Map<String, Object> config) {
         
         stage('packaging') {
             steps {
-                profile = getConfig(config, "profile", "dev")
+                script {
+                    profile = getConfig(config, "profile", "dev")
+                }
                 sh "./mvnw verify -P$profile -DskipTests"
                 archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
             }
