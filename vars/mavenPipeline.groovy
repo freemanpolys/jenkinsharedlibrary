@@ -12,41 +12,15 @@ At the time of writing this lines the supported parameters ares:
 devsMail = ''
 call(Map<String, Object> config) {
     pipeline {
-    agent  any
-    tools {
-        maven "Maven"
+      agent any
+      stages {
+        stage('Even Stage') {
+          steps {
+            echo "The build number is even"
+          }
+        }
+      }
     }
-
-    stages {
-
-        stage('check java') {
-            steps {
-                sh "java -version"
-            }
-        }
-
-        stage('clean') {
-        steps {
-            sh 'mvn clean'
-        }
-        }
-
-        stage('backend tests') {
-        steps {
-            sh 'mvn test'
-        }
-        }
-        
-        stage('packaging') {
-            steps {
-                sh "./mvnw verify -Pprod -DskipTests"
-                archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
-            }
-        }
-
-    }
-    }
-
 }
 
 def getConfig(Map<String, Object> config, String key, defaultValue) {
